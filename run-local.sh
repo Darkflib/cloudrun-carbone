@@ -18,6 +18,7 @@ else
     echo "✅ CARBONE_EE_LICENSE is set - running with Enterprise Edition features"
     CARBONE_LICENSE_ARG="-e CARBONE_EE_LICENSE=\"$CARBONE_EE_LICENSE\""
 fi
+
 # Build the image
 echo "🔨 Building Docker image..."
 docker build \

@@ -44,6 +44,7 @@ else
     echo "✅ CARBONE_EE_LICENSE is set - deploying with Enterprise Edition features"
     CARBONE_LICENSE_ARG="--set-env-vars CARBONE_EE_LICENSE=\"$CARBONE_EE_LICENSE\""
 fi
+
 # Set variables
 IMAGE_NAME="cloudrun-carbone"
 SERVICE_NAME="carbone-service"

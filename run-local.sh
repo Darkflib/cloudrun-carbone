@@ -8,15 +8,16 @@ set -e
 echo "🚀 Cloudrun-Carbone Local Development"
 echo "====================================="
 
-# Check if required environment variables are set
+# Check for optional license
 if [ -z "$CARBONE_EE_LICENSE" ]; then
-    echo "❌ Error: CARBONE_EE_LICENSE environment variable is required"
-    echo "   Please set your Carbone Enterprise Edition license:"
+    echo "ℹ️  CARBONE_EE_LICENSE not set - running with Community Edition features"
+    echo "   To enable Enterprise Edition features, set your license:"
     echo "   export CARBONE_EE_LICENSE=your_license_here"
-    exit 1
+    CARBONE_LICENSE_ARG=""
+else
+    echo "✅ CARBONE_EE_LICENSE is set - running with Enterprise Edition features"
+    CARBONE_LICENSE_ARG="-e CARBONE_EE_LICENSE=\"$CARBONE_EE_LICENSE\""
 fi
-
-echo "✅ CARBONE_EE_LICENSE is set"
 
 # Build the image
 echo "🔨 Building Docker image..."
@@ -35,6 +36,6 @@ echo "   Press Ctrl+C to stop"
 
 docker run --rm -it \
     -p 4000:4000 \
-    -e CARBONE_EE_LICENSE="$CARBONE_EE_LICENSE" \
+    $CARBONE_LICENSE_ARG \
     -e CARBONE_EE_STUDIO=true \
     cloudrun-carbone:local

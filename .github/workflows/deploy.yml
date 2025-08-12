@@ -43,13 +43,22 @@ jobs:
 
     - name: Deploy to Cloud Run
       run: |
+        # Check if CARBONE_EE_LICENSE secret is available
+        if [ -n "${{ secrets.CARBONE_EE_LICENSE }}" ]; then
+          echo "Deploying with Carbone Enterprise Edition license"
+          LICENSE_ENV="--set-env-vars CARBONE_EE_LICENSE=${{ secrets.CARBONE_EE_LICENSE }}"
+        else
+          echo "Deploying with Carbone Community Edition (no license provided)"
+          LICENSE_ENV=""
+        fi
+        
         gcloud run deploy $SERVICE_NAME \
           --image gcr.io/$PROJECT_ID/$IMAGE_NAME:latest \
           --platform managed \
           --region $REGION \
           --allow-unauthenticated=false \
           --set-env-vars CARBONE_EE_STUDIO=true \
-          --set-env-vars CARBONE_EE_LICENSE=${{ secrets.CARBONE_EE_LICENSE }} \
+          $LICENSE_ENV \
           --port 4000 \
           --memory 1Gi \
           --cpu 1 \

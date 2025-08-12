@@ -37,21 +37,28 @@ Always reference these instructions first and fallback to search or bash command
 
 3. **Run locally for development**:
    ```bash
+   # Optional: Set license for Enterprise Edition features
    export CARBONE_EE_LICENSE=your_license_here
    ./run-local.sh
    ```
-   - **Requirements**: Valid Carbone EE license
+   - **Requirements**: None (runs Community Edition without license)
+   - **Optional**: Valid Carbone EE license for Enterprise features
    - **Service URL**: http://localhost:4000
    - **Startup time**: 5-10 seconds
    - **Studio interface**: Available at root URL (/) when CARBONE_EE_STUDIO=true
 
 4. **Test the service manually**:
    ```bash
-   # Start service in background
-   CARBONE_EE_LICENSE=test_license docker run --rm -d -p 4000:4000 \
-     -e CARBONE_EE_LICENSE="test_license" \
+   # Start service in background (Community Edition - no license required)
+   docker run --rm -d -p 4000:4000 \
      -e CARBONE_EE_STUDIO=true \
      cloudrun-carbone:local
+   
+   # OR with Enterprise Edition license
+   # CARBONE_EE_LICENSE=test_license docker run --rm -d -p 4000:4000 \
+   #   -e CARBONE_EE_LICENSE="test_license" \
+   #   -e CARBONE_EE_STUDIO=true \
+   #   cloudrun-carbone:local
    
    # Test endpoints
    curl -s http://localhost:4000/                    # Studio interface (200)
@@ -66,6 +73,7 @@ Always reference these instructions first and fallback to search or bash command
 5. **Manual deployment**:
    ```bash
    # Prerequisites: gcloud CLI installed and authenticated
+   # Optional: Set license for Enterprise Edition features
    export CARBONE_EE_LICENSE=your_license_here
    export GCP_REGION=us-central1  # optional, defaults to us-central1
    ./deploy-manual.sh
@@ -92,9 +100,8 @@ Always reference these instructions first and fallback to search or bash command
 
 2. **Container startup validation**:
    ```bash
-   # Test container starts successfully
-   CARBONE_EE_LICENSE=test docker run --rm -d -p 4000:4000 \
-     -e CARBONE_EE_LICENSE="test" \
+   # Test container starts successfully (Community Edition)
+   docker run --rm -d -p 4000:4000 \
      -e CARBONE_EE_STUDIO=true \
      cloudrun-carbone:test
    
@@ -109,7 +116,7 @@ Always reference these instructions first and fallback to search or bash command
 3. **Configuration validation**:
    ```bash
    # Verify scripts are executable and functional
-   ./run-local.sh  # Should fail with license error - expected
+   ./run-local.sh  # Should show license info message and proceed with build
    ./deploy-manual.sh  # Should fail with gcloud config error - expected
    ```
 
@@ -135,7 +142,7 @@ Always reference these instructions first and fallback to search or bash command
 
 **GitHub Repository Secrets** (Settings → Secrets and variables → Actions):
 - `GCP_SA_KEY`: Google Cloud Service Account JSON key
-- `CARBONE_EE_LICENSE`: Carbone Enterprise Edition license
+- `CARBONE_EE_LICENSE`: Carbone Enterprise Edition license (optional - runs Community Edition if not provided)
 
 **GitHub Repository Variables**:
 - `GCP_PROJECT_ID`: Google Cloud Project ID
@@ -172,7 +179,7 @@ Always reference these instructions first and fallback to search or bash command
 - **CPU**: 1 vCPU (Cloud Run default)
 - **Authentication**: Required for Cloud Run (use `gcloud auth print-identity-token`)
 - **Studio Interface**: Enabled by default (`CARBONE_EE_STUDIO=true`)
-- **License**: Enterprise Edition required for full features
+- **License**: Enterprise Edition optional for additional features (defaults to Community Edition)
 
 ## API Testing
 

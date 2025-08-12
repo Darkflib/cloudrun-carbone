@@ -34,16 +34,16 @@ fi
 
 echo "✅ Using project: $PROJECT_ID"
 
-# Check required variables
+# Check for optional license
 if [ -z "$CARBONE_EE_LICENSE" ]; then
-    echo "❌ Error: CARBONE_EE_LICENSE environment variable is required"
-    echo "   Please set your Carbone Enterprise Edition license:"
+    echo "ℹ️  CARBONE_EE_LICENSE not set - deploying with Community Edition features"
+    echo "   To enable Enterprise Edition features, set your license:"
     echo "   export CARBONE_EE_LICENSE=your_license_here"
-    exit 1
+    CARBONE_LICENSE_ARG=""
+else
+    echo "✅ CARBONE_EE_LICENSE is set - deploying with Enterprise Edition features"
+    CARBONE_LICENSE_ARG="--set-env-vars CARBONE_EE_LICENSE=\"$CARBONE_EE_LICENSE\""
 fi
-
-echo "✅ CARBONE_EE_LICENSE is set"
-
 # Set variables
 IMAGE_NAME="cloudrun-carbone"
 SERVICE_NAME="carbone-service"
@@ -59,7 +59,7 @@ gcloud run deploy $SERVICE_NAME \
     --region $REGION \
     --allow-unauthenticated=false \
     --set-env-vars CARBONE_EE_STUDIO=true \
-    --set-env-vars CARBONE_EE_LICENSE="$CARBONE_EE_LICENSE" \
+    $CARBONE_LICENSE_ARG \
     --port 4000 \
     --memory 1Gi \
     --cpu 1 \

@@ -1,0 +1,31 @@
+# Git files
+.git
+.gitignore
+
+# Documentation
+README.md
+*.md
+
+# Scripts
+*.sh
+
+# GitHub workflows
+.github
+
+# Local development files
+.env
+.envrc
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
